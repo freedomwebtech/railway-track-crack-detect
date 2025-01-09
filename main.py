@@ -24,12 +24,7 @@ names = model.names
 # Open the video file or webcam
 cap = cv2.VideoCapture('peoplecount1.mp4')
 count=0
-area1=[(250,445),(211,448),(475,574),(516,573)]
-area2=[(201,451),(179,455),(417,582),(446,577)]
-enter={}
-list=[]
-exit={}
-list1=[]
+
 while True:
     # Read a frame from the video
     ret, frame = cap.read()
@@ -56,47 +51,10 @@ while True:
        
         for box, class_id, track_id, conf in zip(boxes, class_ids, track_ids, confidences):
             c = names[class_id]
-            if 'person' in c:
-                x1, y1, x2, y2 = box
-                
-                result=cv2.pointPolygonTest(np.array(area2,np.int32),((x1,y2)),False)
-                if result>=0:
-                    enter[track_id]=(x1,y2)
-                if track_id in enter:
-                     result1=cv2.pointPolygonTest(np.array(area1,np.int32),((x1,y2)),False)
-                     if result1>=0:
-                        cv2.rectangle(frame,(x1,y1),(x2,y2),(0,255,0),2)
-                        cv2.circle(frame,(x1,y2),4,(255,0,0),-1)
-                        cvzone.putTextRect(frame,f'{track_id}',(x1,y1),1,1)
-                        if list.count(track_id)==0:
-                           list.append(track_id)
-################################################################################################
-                result2=cv2.pointPolygonTest(np.array(area1,np.int32),((x1,y2)),False)
-                if result2>=0:
-                    exit[track_id]=(x1,y2)
-                if track_id in exit:
-                     result3=cv2.pointPolygonTest(np.array(area2,np.int32),((x1,y2)),False)
-                     if result3>=0:
-                        cv2.rectangle(frame,(x1,y1),(x2,y2),(255,0,0),2)
-                        cv2.circle(frame,(x1,y2),4,(255,0,255),-1)
-                        cvzone.putTextRect(frame,f'{track_id}',(x1,y1),1,1)
-                        if list1.count(track_id)==0:
-                           list1.append(track_id)           
-                           
-                       
-                         
-                    
-        
-            
-    
-    enterlist=len(list)
-    cvzone.putTextRect(frame,f"Enter:-'{enterlist}'",(50,60),2,2)
-    exitlist=len(list1)
-    cvzone.putTextRect(frame,f"Exit:-'{exitlist}'",(50,160),2,2)
-    
-
-    cv2.polylines(frame,[np.array(area1,np.int32)],True,(255,0,255),2)
-    cv2.polylines(frame,[np.array(area2,np.int32)],True,(255,0,255),2)
+            cv2.rectangle(frame,(x1,y1),(x2,y2),(0,255,0),2)
+            cv2.circle(frame,(x1,y2),4,(255,0,0),-1)
+            cvzone.putTextRect(frame,f'{track_id}',(x1,y1),1,1)
+     
 
     # Display the frame
     cv2.imshow("RGB", frame)
